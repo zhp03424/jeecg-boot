@@ -28,7 +28,7 @@
 
         <template v-if="!model.id">
           <a-form-item label="登录密码" :labelCol="labelCol" :wrapperCol="wrapperCol" >
-            <a-input type="password" placeholder="请输入登录密码" v-decorator="[ 'password']" />
+            <a-input type="password" placeholder="请输入登录密码" v-decorator="[ 'password',validatorRules.password]" />
           </a-form-item>
 
           <a-form-item label="确认密码" :labelCol="labelCol" :wrapperCol="wrapperCol" >
@@ -269,7 +269,7 @@
           fileUpload: window._CONFIG['domianURL']+"/sys/common/upload",
           userWithDepart: "/sys/user/userDepartList", // 引入为指定用户查看部门信息需要的url
           userId:"/sys/user/generateUserId", // 引入生成添加用户情况下的url
-          syncUserByUserName:"/process/extActProcess/doSyncUserByUserName",//同步用户到工作流
+          syncUserByUserName:"/act/process/extActProcess/doSyncUserByUserName",//同步用户到工作流
           queryTenantList: '/sys/tenant/queryList'
         },
         identity:"1",

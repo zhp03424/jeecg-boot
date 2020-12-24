@@ -374,7 +374,7 @@ public class SysUserController {
             Map<String,String>  useDepNames = sysUserService.getDepNamesByUserIds(userIds);
             userList.forEach(item->{
                 //TODO 临时借用这个字段用于页面展示
-                item.setOrgCode(useDepNames.get(item.getId()));
+                item.setOrgCodeTxt(useDepNames.get(item.getId()));
             });
         }
 
@@ -889,8 +889,12 @@ public class SysUserController {
                 return result;
             }
         }
-
-		if (!smscode.equals(code)) {
+        if(null == code){
+            result.setMessage("手机验证码失效，请重新获取");
+            result.setSuccess(false);
+            return result;
+        }
+		if (!smscode.equals(code.toString())) {
 			result.setMessage("手机验证码错误");
 			result.setSuccess(false);
 			return result;
@@ -1039,7 +1043,7 @@ public class SysUserController {
 			if (oConvertUtils.isEmpty(token)) {
 				 username = JwtUtil.getUserNameByToken(request);
 			} else {
-				 username = JwtUtil.getUsername(token);				
+				 username = JwtUtil.getUsername(token);
 			}
 
 			log.info(" ------ 通过令牌获取部分用户信息，当前用户： " + username);
@@ -1170,7 +1174,7 @@ public class SysUserController {
             String sex=jsonObject.getString("sex");
             String phone=jsonObject.getString("phone");
             String email=jsonObject.getString("email");
-            // Date birthday=jsonObject.getDate("birthday");
+            Date birthday=jsonObject.getDate("birthday");
             SysUser userPhone = sysUserService.getUserByPhone(phone);
             if(sysUser==null) {
                 result.error500("未找到对应用户!");
@@ -1196,6 +1200,9 @@ public class SysUserController {
                 }
                 if(StringUtils.isNotBlank(email)){
                     sysUser.setEmail(email);
+                }
+                if(null != birthday){
+                    sysUser.setBirthday(birthday);
                 }
                 sysUser.setUpdateTime(new Date());
                 sysUserService.updateById(sysUser);
